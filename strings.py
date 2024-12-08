@@ -25,7 +25,7 @@ cdef class Dual_x:
     cdef public object real  # Allow scalars or arrays
     cdef public object dual
 
-    def __cinit__(self, real, dual):
+    def __init__(self, real, dual):
         """
         Initialize the Dual_x class to support dynamcially distinguish between scalars and arrays.
         If real and dual are arrays, enforce that they must be the same shape.
@@ -255,7 +255,7 @@ cdef class Dual_x_array:
     cdef public object real  # Store real as Python object
     cdef public object dual  # Store dual as Python object
 
-    def __cinit__(self, cnp.ndarray[cnp.float64_t, ndim=1] real, cnp.ndarray[cnp.float64_t, ndim=1] dual):
+    def __init__(self, cnp.ndarray[cnp.float64_t, ndim=1] real, cnp.ndarray[cnp.float64_t, ndim=1] dual):
         """
         Initialize the Dual_x_array class, assuming both inputs are 1D float arrays. Avoids dynamic type checking
         for boosted performance.

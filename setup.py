@@ -1,10 +1,12 @@
 from setuptools import setup, Extension
 from Cython.Build import cythonize
+import numpy as np
 
 extensions = [
     Extension(
         "dual_autodiff_x.dual",
         ["src/dual_autodiff_x/dual.pyx"],
+        include_dirs=[np.get_include()],
     ),
 ]
 
