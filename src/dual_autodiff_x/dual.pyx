@@ -200,22 +200,24 @@ cdef class Dual_x:
         """Compute the natural logarithm of the Dual number.
 
         Returns:
-            Dual: A new Dual number representing the natural logarithm.
+            Dual_x: A new Dual_x number representing the natural logarithm.
 
         Raises:
             ValueError: If the real part is less than or equal to zero.
             ValueError: If the real part is less than 1e-10.
-            RuntimeWarning: If the real part is close to zero within 1e-6 but larger than 1e-10, to warn of potential numerical instability.
+            RuntimeWarning: If the real part is close to zero within 1e-6 but larger than 1e-10, 
+                            to warn of potential numerical instability.
         """
         tolerance_exception = 1e-10
         tolerance_warning = 1e-6
 
         if isinstance(self.real, np.ndarray):
+            # Handle array case
             if np.any(self.real <= 0):
                 raise ValueError("Log cannot take 0 or negative real part.")
-            elif np.any(self.real <= tolerance_exception):
+            if np.any((self.real > 0) & (self.real <= tolerance_exception)):
                 raise ValueError("Real value less than 1e-10. Potential overflow in log.")
-            elif np.any(self.real < tolerance_warning):
+            if np.any((self.real > tolerance_exception) & (self.real < tolerance_warning)):
                 warnings.warn("Log input close to zero; numerical instability possible.", RuntimeWarning)
 
             return Dual_x(
@@ -223,15 +225,16 @@ cdef class Dual_x:
                 (1.0 / self.real) * self.dual
             )
         else:
+            # Handle scalar case
             if self.real <= 0:
                 raise ValueError("Log cannot take 0 or negative real part.")
-            elif self.real <= tolerance_exception:
+            if 0 < self.real <= tolerance_exception:
                 raise ValueError("Real value less than 1e-10. Potential overflow in log.")
-            elif self.real < tolerance_warning:
+            if tolerance_exception < self.real < tolerance_warning:
                 warnings.warn("Log input close to zero; numerical instability possible.", RuntimeWarning)
 
             return Dual_x(
-                log(self.real),
+                np.log(self.real),
                 (1.0 / self.real) * self.dual
             )
 
@@ -344,13 +347,33 @@ cdef class Dual_x_array:
             (1.0 / (np.cos(self.real) ** 2)) * self.dual
         )
     cpdef Dual_x_array log(self):
+        """Compute the natural logarithm of the Dual_x_array.
+
+        Returns:
+            Dual_x_array: A new Dual_x_array representing the natural logarithm.
+
+        Raises:
+            ValueError: If any real part is less than or equal to zero.
+            ValueError: If any real part is less than 1e-10.
+            RuntimeWarning: If any real part is close to zero within 1e-6 but larger than 1e-10,
+                            to warn of potential numerical instability.
+        """
         cdef cnp.ndarray[cnp.float64_t, ndim=1] r = self.real
         cdef cnp.ndarray[cnp.float64_t, ndim=1] d = self.dual
+        cdef double tolerance_exception = 1e-10
+        cdef double tolerance_warning = 1e-6
 
+        # Check for invalid or problematic values in the array
         if np.any(r <= 0):
             raise ValueError("Log cannot take 0 or negative real part.")
+        if np.any((r > 0) & (r <= tolerance_exception)):
+            raise ValueError("Real value less than 1e-10. Potential overflow in log.")
+        if np.any((r > tolerance_exception) & (r < tolerance_warning)):
+            warnings.warn("Log input close to zero; numerical instability possible.", RuntimeWarning)
 
+        # Compute the log and return the result
         return Dual_x_array(np.log(r), (1.0 / r) * d)
+
 
     cpdef Dual_x_array exp(self):
         cdef cnp.ndarray[cnp.float64_t, ndim=1] r = self.real
