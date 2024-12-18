@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dual_autodiff.dual &mdash; Dual Autodifferentiation Package for Cython 0.1.dev0+d20241205 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c2df3776"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Dual Autodifferentiation Package for Cython
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Class Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Dual Class Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dual_autodiff_x.html">Dual Autodifferentiation Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Indices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Summary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/modules.html">Dual Autodiff_x Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Dual Autodifferentiation Package for Cython</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">dual_autodiff.dual</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for dual_autodiff.dual</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<div class="viewcode-block" id="Dual">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual">[docs]</a>
+<span class="k">class</span> <span class="nc">Dual</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A class representing dual numbers for automatic differentiation.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        real (float, int, or array-like): The real part of the dual number. </span>
+<span class="sd">            This can be a scalar (float or int) or an array-like object (e.g., list, tuple, numpy.ndarray).</span>
+<span class="sd">        dual (float, int, or array-like): The dual part of the dual number.</span>
+<span class="sd">            This can be a scalar (float or int) or an array-like object (e.g., list, tuple, numpy.ndarray).</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        For mathematical operations like sine, cosine, and logarithm, the real and dual parts of the output</span>
+<span class="sd">        are evaluated according to the following formula:</span>
+<span class="sd">        </span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f(a + b\epsilon) = f(a) + f&#39;(a)b\epsilon</span>
+
+<span class="sd">        This formula describes how dual numbers are processed through a given mathematical function \(f\).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">dual</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize an object of the Dual class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            real (float, int, or array-like): The real part of the dual number.</span>
+<span class="sd">                This can be a scalar or an array-like object.</span>
+<span class="sd">            dual (float, int, or array-like): The dual part of the dual number.</span>
+<span class="sd">                This can be a scalar or an array-like object.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If both `real` and `dual` are arrays (e.g., numpy.ndarray) but their shapes do not match.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            If both `real` and `dual` are arrays, a check is performed to ensure their shapes match.</span>
+<span class="sd">            This is to ensure that element-wise operations on the dual number are valid. If the shapes</span>
+<span class="sd">            are mismatched, a `ValueError` is raised.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert inputs to numpy arrays if they are array-like</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dual</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">dual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dual</span><span class="p">)</span>
+        
+        <span class="c1"># Check if both are arrays and their shapes match</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dual</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">real</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">dual</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape mismatch: real has shape </span><span class="si">{</span><span class="n">real</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, but dual has shape </span><span class="si">{</span><span class="n">dual</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">=</span> <span class="n">real</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dual</span> <span class="o">=</span> <span class="n">dual</span>
+
+<div class="viewcode-block" id="Dual.__add__">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.__add__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add two Dual numbers.</span>
+
+<span class="sd">        Operator:</span>
+<span class="sd">            Uses the :math:`+` operator.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing their sum.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.__sub__">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.__sub__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Subtract one Dual number from another.</span>
+
+<span class="sd">        Operator:</span>
+<span class="sd">            Uses the :math:`-` operator.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the difference.</span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            For addition and subtraction, the real and dual parts are added or subtracted separately.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.__mul__">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.__mul__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Multiply two Dual numbers.</span>
+
+<span class="sd">        Operator:</span>
+<span class="sd">            Uses the :math:`*` operator.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the product :math:`(a + b\epsilon)(c + d\epsilon)`. </span>
+<span class="sd">            The real part of the product output is simply the product of the real parts of the arguments :math:`ab`. </span>
+<span class="sd">            The dual part of the output is the term that is first order in :math:`\epsilon` :math:`(ad + bc)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">dual</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">real</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.__pow__">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.__pow__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exponent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Raise a Dual number to a power.</span>
+
+<span class="sd">        Operator:</span>
+<span class="sd">            Uses the :math:`**` operator.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exponent (float, int): The exponent to raise the Dual number to. Must be a real number.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number raised to the power of the exponent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">**</span> <span class="n">exponent</span><span class="p">,</span>
+            <span class="n">exponent</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">real</span> <span class="o">**</span> <span class="p">(</span><span class="n">exponent</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.sin">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.sin">[docs]</a>
+    <span class="k">def</span> <span class="nf">sin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the sine of the Dual number.</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            scalar, array-like</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the sine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.cos">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.cos">[docs]</a>
+    <span class="k">def</span> <span class="nf">cos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the cosine of the Dual number.</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            scalar, array-like</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the cosine.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">),</span>
+            <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.tan">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.tan">[docs]</a>
+    <span class="k">def</span> <span class="nf">tan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the tangent of the Dual number.</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            scalar, array-like</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the tangent.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the real part is within 1e-10 of (π/2 + nπ), where tangent is undefined.</span>
+<span class="sd">            RuntimeWarning: If the real part is close to (π/2 + nπ) by less than 1e-6, which may cause numerical instability.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tolerance_exception</span> <span class="o">=</span> <span class="mf">1e-10</span>
+        <span class="n">tolerance_warning</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+        <span class="n">real_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>  <span class="c1"># Ensure the real part is treated as an array</span>
+        <span class="n">dual_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span>  <span class="c1"># Ensure the dual part is treated as an array</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="n">pi_over_2_plus_n_pi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">pi_over_2_plus_n_pi</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">delta</span> <span class="o">&lt;</span> <span class="n">tolerance_exception</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Real value cannot be within 1e-10 of pi/2 + n*pi. Tan and 1/cos(real) are both undefined at these points.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">delta</span> <span class="o">&gt;=</span> <span class="n">tolerance_exception</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">delta</span> <span class="o">&lt;</span> <span class="n">tolerance_warning</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The proximity of the real value is less than 1e-6 to pi/2 + n*pi. Beware of potential numerical instability.&quot;</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">real_array</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">real_array</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dual_array</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.log">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.log">[docs]</a>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the natural logarithm of the Dual number.</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            scalar, array-like</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the natural logarithm.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the real part is less than or equal to zero.</span>
+<span class="sd">            ValueError: If the real part is less than 1e-10.</span>
+<span class="sd">            RuntimeWarning: If the real part is close to zero within 1e-6 but larger than 1e-10, to warn of potential numerical instability.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tolerance_exception</span> <span class="o">=</span> <span class="mf">1e-10</span>
+        <span class="n">tolerance_warning</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+        <span class="n">real_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>  <span class="c1"># Ensure the real part is treated as an array</span>
+        <span class="n">dual_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span>  <span class="c1"># Ensure the dual part is treated as an array</span>
+
+        <span class="c1"># Logical checks for exceptions and warnings</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">real_array</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">real_array</span> <span class="o">&lt;=</span> <span class="n">tolerance_exception</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Real value is less than 1e-10. Log is undefined at zero, beware of potential overflow.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">real_array</span> <span class="o">&gt;</span> <span class="n">tolerance_exception</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">real_array</span> <span class="o">&lt;</span> <span class="n">tolerance_warning</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Log is undefined for x &lt;= 0. The proximity of the real value to 0 is within 1e-6. Beware of potential numerical instability.&quot;</span><span class="p">,</span>
+                <span class="ne">RuntimeWarning</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">real_array</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Log cannot take in 0 or less than 0 for the real value. Real value must be greater than zero.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">real_array</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">real_array</span><span class="p">)</span> <span class="o">*</span> <span class="n">dual_array</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Dual.exp">
+<a class="viewcode-back" href="../../source/dual_autodiff.html#dual_autodiff.dual.Dual.exp">[docs]</a>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the exponential of the Dual number.</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            scalar, array-like</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Dual: A new Dual number representing the exponential.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Dual</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dual</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandr Prucha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

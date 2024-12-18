@@ -3,6 +3,9 @@ import numpy as np
 cimport numpy as cnp
 import warnings
 
+__all__ = ['Dual_x']  # Only expose Dual_x to sphinx
+
+
 cdef class Dual_x:
     r"""A class representing dual numbers for automatic differentiation.
 
@@ -26,10 +29,23 @@ cdef class Dual_x:
     cdef public object dual
 
     def __cinit__(self, real, dual):
+        """Initialize an object of the Dual_x class.
+
+        Args:
+            real (float, int, or array-like): The real part of the dual number.
+                This can be a scalar or an array-like object.
+            dual (float, int, or array-like): The dual part of the dual number.
+                This can be a scalar or an array-like object.
+
+        Raises:
+            ValueError: If both `real` and `dual` are arrays (e.g., numpy.ndarray) but their shapes do not match.
+
+        Note:
+            If both `real` and `dual` are arrays, a check is performed to ensure their shapes match.
+            This ensures that element-wise operations on the dual number are valid. If the shapes
+            are mismatched, a `ValueError` is raised.
         """
-        Initialize the Dual_x class to support dynamcially distinguish between scalars and arrays.
-        If real and dual are arrays, enforce that they must be the same shape.
-        """
+        # Convert inputs to numpy arrays if they are array-like
         if isinstance(real, (list, tuple)):
             self.real = np.asarray(real, dtype=np.float64)
         elif isinstance(real, (float, int, np.ndarray)):
@@ -50,46 +66,38 @@ cdef class Dual_x:
                 raise ValueError(f"Shape mismatch: real {self.real.shape}, dual {self.dual.shape}")
 
     def __add__(self, other):
-        """Initialize an object of the Dual class.
+        """Add two Dual_x numbers.
 
-        Args:
-            real (float, int, or array-like): The real part of the dual number.
-                This can be a scalar or an array-like object.
-            dual (float, int, or array-like): The dual part of the dual number.
-                This can be a scalar or an array-like object.
+        Operator:
+            Uses the :math:`+` operator.
 
-        Raises:
-            ValueError: If both `real` and `dual` are arrays (e.g., numpy.ndarray) but their shapes do not match.
-
-        Note:
-            If both `real` and `dual` are arrays, a check is performed to ensure their shapes match.
-            This is to ensure that element-wise operations on the dual number are valid. If the shapes
-            are mismatched, a `ValueError` is raised.
+        Returns:
+            Dual_x: A new Dual_x number representing their sum.
         """
         return Dual_x(self.real + other.real, self.dual + other.dual)
 
     def __sub__(self, other):
-        """Subtract one Dual number from another.
+        """Subtract one Dual_x number from another.
 
         Operator:
             Uses the :math:`-` operator.
 
         Returns:
-            Dual: A new Dual number representing the difference.
-        
+            Dual_x: A new Dual_x number representing the difference.
+
         Note:
             For addition and subtraction, the real and dual parts are added or subtracted separately.
         """
         return Dual_x(self.real - other.real, self.dual - other.dual)
 
     def __mul__(self, other):
-        r"""Multiply two Dual numbers.
+        r"""Multiply two Dual_x numbers.
 
         Operator:
             Uses the :math:`*` operator.
 
         Returns:
-            Dual: A new Dual number representing the product :math:`(a + b\epsilon)(c + d\epsilon)`. 
+            Dual_x: A new Dual_x number representing the product :math:`(a + b\epsilon)(c + d\epsilon)`. 
             The real part of the product output is simply the product of the real parts of the arguments :math:`ab`. 
             The dual part of the output is the term that is first order in :math:`\epsilon` :math:`(ad + bc)`.
         """
@@ -99,16 +107,16 @@ cdef class Dual_x:
         )
 
     def __pow__(self, exponent):
-        """Raise a Dual number to a power.
+        """Raise a Dual_x number to a power.
 
         Operator:
             Uses the :math:`**` operator.
 
         Args:
-            exponent (float, int): The exponent to raise the Dual number to. Must be a real number.
+            exponent (float, int): The exponent to raise the Dual_x number to. Must be a real number.
 
         Returns:
-            Dual: A new Dual number raised to the power of the exponent.
+            Dual_x: A new Dual_x number raised to the power of the exponent.
         """
         if isinstance(self.real, np.ndarray):
             return Dual_x(
@@ -122,10 +130,10 @@ cdef class Dual_x:
             )
 
     cpdef Dual_x sin(self):
-        """Compute the sine of the Dual number.
+        """Compute the sine of the Dual_x number.
 
         Returns:
-            Dual: A new Dual number representing the sine.
+            Dual_x: A new Dual_x number representing the sine.
         """
         if isinstance(self.real, np.ndarray):
             return Dual_x(
@@ -139,10 +147,10 @@ cdef class Dual_x:
             )
 
     cpdef Dual_x cos(self):
-        """Compute the cosine of the Dual number.
+        """Compute the cosine of the Dual_x number.
 
         Returns:
-            Dual: A new Dual number representing the cosine.
+            Dual_x: A new Dual_x number representing the cosine.
         """
         if isinstance(self.real, np.ndarray):
             return Dual_x(
@@ -197,22 +205,20 @@ cdef class Dual_x:
             return Dual_x(val, deriv)
 
     cpdef Dual_x log(self):
-        """Compute the natural logarithm of the Dual number.
-
-        Returns:
-            Dual_x: A new Dual_x number representing the natural logarithm.
+        """
+        Compute the natural logarithm of the Dual_x number.
 
         Raises:
             ValueError: If the real part is less than or equal to zero.
             ValueError: If the real part is less than 1e-10.
-            RuntimeWarning: If the real part is close to zero within 1e-6 but larger than 1e-10, 
-                            to warn of potential numerical instability.
+            RuntimeWarning: If the real part is close to zero within 1e-6 but larger than 1e-10.
         """
-        tolerance_exception = 1e-10
-        tolerance_warning = 1e-6
+        cdef double tolerance_exception = 1e-10
+        cdef double tolerance_warning = 1e-6
+        cdef double real_value  # Declare real_value at the top
 
         if isinstance(self.real, np.ndarray):
-            # Handle array case
+            # Array input: Perform checks and computations element-wise
             if np.any(self.real <= 0):
                 raise ValueError("Log cannot take 0 or negative real part.")
             if np.any((self.real > 0) & (self.real <= tolerance_exception)):
@@ -220,29 +226,31 @@ cdef class Dual_x:
             if np.any((self.real > tolerance_exception) & (self.real < tolerance_warning)):
                 warnings.warn("Log input close to zero; numerical instability possible.", RuntimeWarning)
 
-            return Dual_x(
-                np.log(self.real),
-                (1.0 / self.real) * self.dual
-            )
+            # Compute the natural logarithm for arrays
+            return Dual_x(np.log(self.real), (1.0 / self.real) * self.dual)
+
         else:
-            # Handle scalar case
-            if self.real <= 0:
+            # Scalar input: assign real_value here
+            real_value = self.real
+
+            if real_value <= 0.0:
                 raise ValueError("Log cannot take 0 or negative real part.")
-            if 0 < self.real <= tolerance_exception:
+            if real_value <= tolerance_exception:
                 raise ValueError("Real value less than 1e-10. Potential overflow in log.")
-            if tolerance_exception < self.real < tolerance_warning:
+            if tolerance_exception < real_value < tolerance_warning:
                 warnings.warn("Log input close to zero; numerical instability possible.", RuntimeWarning)
 
-            return Dual_x(
-                np.log(self.real),
-                (1.0 / self.real) * self.dual
-            )
+            # Compute the natural logarithm for scalars
+            return Dual_x(np.log(real_value), (1.0 / real_value) * self.dual)
+
+
+
 
     cpdef Dual_x exp(self):
-        """Compute the exponential of the Dual number.
+        """Compute the exponential of the Dual_x number.
 
         Returns:
-            Dual: A new Dual number representing the exponential.
+            Dual_x: A new Dual_x number representing the exponential.
         """
         if isinstance(self.real, np.ndarray):
             val = np.exp(self.real)
@@ -250,6 +258,7 @@ cdef class Dual_x:
         else:
             val = exp(self.real)
             return Dual_x(val, val * self.dual)
+
 
 
 

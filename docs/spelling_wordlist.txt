@@ -1,0 +1,9 @@
+dual_autodiff
+autodifferentiation
+numpy
+Dual
+sin
+cos
+tan
+log
+exp

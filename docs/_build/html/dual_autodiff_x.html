@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dual Autodifferentiation Tutorial &mdash; Dual Autodifferentiation Package for Cython 0.1.dev0+d20241205 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c2df3776"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "displayMath": [["$$", "$$"], ["\\[", "\\]"]]}, "tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Dual Class Documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Dual Autodifferentiation Package for Cython
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Class Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Dual Class Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dual Autodifferentiation Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Demonstration-of-the-Dual-Class">Demonstration of the Dual Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Basic-Arithmetic">Basic Arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exceptions-and-Warnings">Exceptions and Warnings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Finding-the-derivative-of-a-function">Finding the derivative of a function</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Indices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Summary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">Dual Autodiff_x Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dual Autodifferentiation Package for Cython</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Dual Autodifferentiation Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dual_autodiff_x.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Dual-Autodifferentiation-Tutorial">
+<h1>Dual Autodifferentiation Tutorial<a class="headerlink" href="#Dual-Autodifferentiation-Tutorial" title="Link to this heading"></a></h1>
+<section id="Demonstration-of-the-Dual-Class">
+<h2>Demonstration of the Dual Class<a class="headerlink" href="#Demonstration-of-the-Dual-Class" title="Link to this heading"></a></h2>
+<p>This notebook demonstrates the implementation of the <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> class, which performs automatic differentiation through the use of dual numbers. Dual numbers are represented as <span class="math notranslate nohighlight">\(a + b\varepsilon\)</span>. The number <span class="math notranslate nohighlight">\(\varepsilon\)</span> is defined such that its square vanishes. The key property of Dual numbers is that a function of a dual number <span class="math notranslate nohighlight">\(f(a + b\varepsilon) = f(a) + f'(a)b\varepsilon\)</span>, so we can simply read of the derivative of any function <span class="math notranslate nohighlight">\(f\)</span> by setting <span class="math notranslate nohighlight">\(b=1\)</span> and
+evaluating the value of the function at the dual number.</p>
+<p>In this tutorial, we will show the implementation:</p>
+<ul class="simple">
+<li><p>Arithmetic operations: addition, subtraction, multiplication, exponentiation.</p></li>
+<li><p>Important functions: sine, cosine, tangent, logarithm, and exponential.</p></li>
+<li><p>Special cases, such as exceptions and warnings.</p></li>
+</ul>
+<p>Note: The <code class="docutils literal notranslate"><span class="pre">Dual_x_array</span></code> class has identical syntax to <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code>, but only takes arrays as inputs, because the attribute types are statically declared.</p>
+</section>
+<section id="Basic-Arithmetic">
+<h2>Basic Arithmetic<a class="headerlink" href="#Basic-Arithmetic" title="Link to this heading"></a></h2>
+<p>The basic arithmetic operations on dual numbers are summarized below:</p>
+<ul class="simple">
+<li><p>Addition: <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">+</span> <span class="pre">(c</span> <span class="pre">+</span> <span class="pre">dε)</span> <span class="pre">=</span> <span class="pre">(a+c)</span> <span class="pre">+</span> <span class="pre">(b+d)ε</span></code></p></li>
+<li><p>Subtraction: <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">-</span> <span class="pre">(c</span> <span class="pre">+</span> <span class="pre">dε)</span> <span class="pre">=</span> <span class="pre">(a-c)</span> <span class="pre">+</span> <span class="pre">(b-d)ε</span></code></p></li>
+<li><p>Multiplication: <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">+</span> <span class="pre">bε)(c</span> <span class="pre">+</span> <span class="pre">dε)</span> <span class="pre">=</span> <span class="pre">ac</span> <span class="pre">+</span> <span class="pre">(ad+bc)ε</span></code> (since <code class="docutils literal notranslate"><span class="pre">ε²</span> <span class="pre">=</span> <span class="pre">0</span></code>)</p></li>
+<li><p>Exponentiation: <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">+</span> <span class="pre">bε)^n</span> <span class="pre">=</span> <span class="pre">a^n</span> <span class="pre">+</span> <span class="pre">n</span> <span class="pre">a^(n-1)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+</ul>
+<p>For addition and subtraction, we treat the real and dual parts of the two number independently. For multiplication, we expand the product and drop the term with <span class="math notranslate nohighlight">\(\varepsilon^2\)</span>. For exponentiation, we use the formula <span class="math notranslate nohighlight">\(f(a + b\varepsilon) = f(a) + f'(a)b\varepsilon\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Let us start by importing the necessary libraries.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dual_autodiff_x.dual</span> <span class="kn">import</span> <span class="n">Dual_x</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="sd">&quot;&quot;&quot;We define two dual numbers x and y.&quot;&quot;&quot;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">)</span>   <span class="c1"># represents 2 + 1ε</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>   <span class="c1"># represents 3 + 4ε</span>
+
+<span class="c1"># Addition</span>
+<span class="n">z_add</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x + y = </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z_add</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">z_add</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="c1"># Subtraction</span>
+<span class="n">z_sub</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">y</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - y = </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z_sub</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">z_sub</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="c1"># Multiplication</span>
+<span class="n">z_mul</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x * y = </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z_mul</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">z_mul</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="c1"># Exponentiation</span>
+<span class="n">z_pow</span> <span class="o">=</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x^3 = </span><span class="si">{}</span><span class="s2"> + </span><span class="si">{}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">z_pow</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">z_pow</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x + y = 8.0 + 9.0ε
+x - y = 2.0 + 5.0ε
+x * y = 15.0 + 31.0ε
+x^3 = 125.0 + 525.0ε
+</pre></div></div>
+</div>
+</section>
+<section id="Functions">
+<h2>Functions<a class="headerlink" href="#Functions" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> class supports several elementary functions:</p>
+<ol class="arabic simple">
+<li><p><strong>Sine and Cosine</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sin(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">=</span> <span class="pre">sin(a)</span> <span class="pre">+</span> <span class="pre">cos(a)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cos(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">=</span> <span class="pre">cos(a)</span> <span class="pre">-</span> <span class="pre">sin(a)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Tangent</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tan(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">=</span> <span class="pre">tan(a)</span> <span class="pre">+</span> <span class="pre">sec^2(a)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">a</span></code> is close to <code class="docutils literal notranslate"><span class="pre">(π/2</span> <span class="pre">+</span> <span class="pre">nπ)</span></code> boundaries, we find that both <code class="docutils literal notranslate"><span class="pre">tan</span></code> and <code class="docutils literal notranslate"><span class="pre">sec</span></code> asymptotically approach <code class="docutils literal notranslate"><span class="pre">∞</span></code>. The function will give a warning if <code class="docutils literal notranslate"><span class="pre">a</span></code> (real part) is found to be within <code class="docutils literal notranslate"><span class="pre">10^{-6}</span></code> of the boundaries, and raise an exception if it gets to within <code class="docutils literal notranslate"><span class="pre">10^{-10}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Logarithm</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">log(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">=</span> <span class="pre">log(a)</span> <span class="pre">+</span> <span class="pre">(1/a)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+<li><p>The real part requires <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> and the dual part only requires <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">≠</span> <span class="pre">0</span></code>. The function will raise exceptions if these conditions are not met. If <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">a</span> <span class="pre">≤</span> <span class="pre">10^{-10}</span></code>, there is risk of overflow/floating precision inaccuracy, so an exception is issued. Warnings will be issued if <code class="docutils literal notranslate"><span class="pre">10^{-10}</span> <span class="pre">&lt;</span> <span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">10^{-6}</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Exponential</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">exp(a</span> <span class="pre">+</span> <span class="pre">bε)</span> <span class="pre">=</span> <span class="pre">exp(a)</span> <span class="pre">+</span> <span class="pre">exp(a)</span> <span class="pre">b</span> <span class="pre">ε</span></code></p></li>
+</ul>
+</li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s test with x = Dual_x(5.0, 7.0) which represents 5.0 + 7.0ε</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">)</span>
+
+<span class="n">x_sin</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sin</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sin(x) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_sin</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x_sin</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="n">x_cos</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">cos</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cos(x) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_cos</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x_cos</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="n">x_tan</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">tan</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tan(x) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_tan</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x_tan</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="n">x_log</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log(x) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_log</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x_log</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+
+<span class="n">x_exp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exp(x) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_exp</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x_exp</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+sin(x) = -0.96 + 1.99ε
+cos(x) = 0.28 + 6.71ε
+tan(x) = -3.38 + 87.00ε
+log(x) = 1.61 + 1.40ε
+exp(x) = 148.41 + 1038.89ε
+</pre></div></div>
+</div>
+</section>
+<section id="Exceptions-and-Warnings">
+<h2>Exceptions and Warnings<a class="headerlink" href="#Exceptions-and-Warnings" title="Link to this heading"></a></h2>
+<p><strong>Tangent near undefined points:</strong> - <code class="docutils literal notranslate"><span class="pre">tan(a)</span></code> and <code class="docutils literal notranslate"><span class="pre">sec(a)</span></code> are both undefined at <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">π/2</span> <span class="pre">+</span> <span class="pre">nπ</span></code>, so both the real and dual parts of the output are undefined. As we stated above, if the <code class="docutils literal notranslate"><span class="pre">a</span></code> is within <code class="docutils literal notranslate"><span class="pre">1e-10</span></code> of these points, we raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception. - If <code class="docutils literal notranslate"><span class="pre">a</span></code> is within <code class="docutils literal notranslate"><span class="pre">1e-6</span></code> but not within <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>, we raise a <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code> instead. The code will continue running, but the user will be warned of potential danger. - In case the input objects are arrays, the code will
+raise the exception/warning if any of the elements in the real array fail the checks.</p>
+<p><strong>Log near and below zero:</strong> - If <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">log(a)</span></code> is undefined and we raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. If <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code>, both <code class="docutils literal notranslate"><span class="pre">log(a)</span></code> and <code class="docutils literal notranslate"><span class="pre">1/a</span></code> are undefined, we also raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. - If the real part is <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">1e-10</span></code>, we raise a different <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, to signal that <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> is not breached, but overflow/floating point inaccuracy is a risk. - If the real part is between <code class="docutils literal notranslate"><span class="pre">1e-10</span></code> and <code class="docutils literal notranslate"><span class="pre">1e-6</span></code>, we issue a <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code> instead. The code will continue executing.</p>
+<p>To demonstrate the exception handling in the <code class="docutils literal notranslate"><span class="pre">tan(a)</span></code> method, let us take a look at some examples:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To demonstrate the behaviour for tan close to the boundary, let&#39;s try π/2 exactly.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">undef_tan</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mf">1e-11</span><span class="p">)</span><span class="o">.</span><span class="n">tan</span><span class="p">()</span>  <span class="c1"># Raises a ValueError</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught expected ValueError for tan:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught expected ValueError for tan: Real value too close to pi/2 + n*pi.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To see the warning beaing raised, let us slightly offset from π/2  by 1e-8, which is &lt;1e-6 but &gt;1e-10</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
+    <span class="n">warn_tan</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">tan</span><span class="p">()</span>
+    <span class="c1"># Check if a warning was triggered</span>
+    <span class="k">if</span> <span class="n">w</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">warn</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught RuntimeWarning for tan:&quot;</span><span class="p">,</span> <span class="n">warn</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+<span class="c1"># Print the result to show it&#39;s computed</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tan((π/2) + 1e-8 + 1ε) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">warn_tan</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">warn_tan</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught RuntimeWarning for tan: Real value close to pi/2 + n*pi; numerical instability possible.
+tan((π/2) + 1e-8 + 1ε) = -100000001.22 + 10000000244014102.00ε
+</pre></div></div>
+</div>
+<p>The real and especially the dual parts of the result are clearly beginning to explode. Rather than letting them, we chose to cap the proximity to the boundaries.</p>
+<p>Let us now move on the see the behavior of the <code class="docutils literal notranslate"><span class="pre">log(a)</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s try log with a non-positive real number.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">undef_log</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>  <span class="c1"># a &lt; 0, this should raise ValueError</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught expected ValueError for log:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught expected ValueError for log: Log cannot take 0 or negative real part.
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s also try log with a positive real number &lt; 1e-10.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">undef_log</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">1e-11</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>  <span class="c1"># a &lt; 0, this should raise a different ValueError</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught expected ValueError for log:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught expected ValueError for log: Real value less than 1e-10. Potential overflow in log.
+</pre></div></div>
+</div>
+<p>Clearly, the two <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> raised give different exceptions. This is to tell the user that the cause for the problem is not the same in both cases. In the former, the condition <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> is breached, whereas in the latter it is not. However, in the latter, <code class="docutils literal notranslate"><span class="pre">a</span></code> is so close to <code class="docutils literal notranslate"><span class="pre">0</span></code> that it may cause issues with overflow or floating point precision. Let us see what happens when <code class="docutils literal notranslate"><span class="pre">1e-10</span> <span class="pre">&lt;</span> <span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">1e-6</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s try a positive real value between 1e-6 and 1e-10, say 1e-8</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">(</span><span class="n">record</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
+    <span class="n">warn_log</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+    <span class="c1"># Check if a warning was triggered</span>
+    <span class="k">if</span> <span class="n">w</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">warn</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught RuntimeWarning for log:&quot;</span><span class="p">,</span> <span class="n">warn</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;log(1e-8 + 1.0ε) = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">warn_log</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">warn_log</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught RuntimeWarning for log: Log input close to zero; numerical instability possible.
+log(1e-8 + 1.0ε) = -18.42 + 100000000.00ε
+</pre></div></div>
+</div>
+<p>The code finished executing, and gave us an output, but we can clearly see that the dual part is beginning to explode, as was the case with the <code class="docutils literal notranslate"><span class="pre">tan(a)</span></code>.</p>
+<p>Class objects of type <code class="docutils literal notranslate"><span class="pre">Dual</span></code> and also handle array-like objects as inputs. The functionality of the code remains broadly the same, except that the code will demand that the <code class="docutils literal notranslate"><span class="pre">real</span></code> and <code class="docutils literal notranslate"><span class="pre">dual</span></code> input array-like objects are of the same shape. If they are not, the code will raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> during the initialization of the <code class="docutils literal notranslate"><span class="pre">Dual</span></code> number object:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s try input arrays with different shapes.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># These arrays have length 3 and 2</span>
+    <span class="c1"># Note these are lists, not numpy arrays</span>
+    <span class="n">array1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">array2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+    <span class="n">mismatched_arrays</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="n">array1</span><span class="p">,</span> <span class="n">array2</span><span class="p">)</span>  <span class="c1"># This should raise ValueError</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Caught expected ValueError for mismatched arrays:&quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Caught expected ValueError for mismatched arrays: Shape mismatch: real (3,), dual (2,)
+</pre></div></div>
+</div>
+</section>
+<section id="Finding-the-derivative-of-a-function">
+<h2>Finding the derivative of a function<a class="headerlink" href="#Finding-the-derivative-of-a-function" title="Link to this heading"></a></h2>
+<p>Let us finish by demonstrating how to employ the Dual class to differentiate more complicated functions, using the function <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">=</span> <span class="pre">log(sin(x))</span> <span class="pre">+</span> <span class="pre">x^2cos(x)</span></code>. Our goal is to find its derivative at <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">1.5</span></code>. First, let us redefine <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">+</span> <span class="pre">1.0ε</span></code> to be be a dual number, where <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">1.5</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x = 1.50 + 1.00ε
+</pre></div></div>
+</div>
+<p>For nested function, we act of <code class="docutils literal notranslate"><span class="pre">x</span></code> with the <code class="docutils literal notranslate"><span class="pre">Dual</span></code> class methods in the same order as the functions act on <code class="docutils literal notranslate"><span class="pre">x</span></code> in <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>. This means that for the first term, <code class="docutils literal notranslate"><span class="pre">sin</span></code> will be applied first, then <code class="docutils literal notranslate"><span class="pre">log</span></code>. For the second term, we act on <code class="docutils literal notranslate"><span class="pre">x^2</span></code> and <code class="docutils literal notranslate"><span class="pre">cos(x)</span></code> separately. We can do this, because the dual number method will automatically apply the chain rule. Thus the derivative of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> is simply:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diff_x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sin</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">cos</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;diff_x = </span><span class="si">{:.2f}</span><span class="s2"> + </span><span class="si">{:.2f}</span><span class="s2">ε&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">diff_x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">diff_x</span><span class="o">.</span><span class="n">dual</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+diff_x = 0.16 + -1.96ε
+</pre></div></div>
+</div>
+<p>We can read off the derivative from the dual part of <code class="docutils literal notranslate"><span class="pre">diff_x</span></code>. Finally, let us compare autodifferentiation to finite difference. We define a function <code class="docutils literal notranslate"><span class="pre">test_func</span></code>, which evaluates the function <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> as a dual number. We then use <code class="docutils literal notranslate"><span class="pre">test_func(x).real</span></code> and <code class="docutils literal notranslate"><span class="pre">test_func(x).dual</span></code> to find the finite difference and autodifferentiation, respectively:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="c1"># We embed the autodifferentiation method inside a function, to be able to call the real part</span>
+    <span class="c1"># for finite difference, and the dual part for autodifferentiation</span>
+    <span class="n">dual_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1"># set dual input to array of ones, with length equal to real input</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">Dual_x</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dual_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">sin</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="o">.</span><span class="n">cos</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">auto_diff</span><span class="p">(</span><span class="n">x_array</span><span class="p">):</span>
+    <span class="c1"># Find the derivative using autodifferentiation</span>
+    <span class="c1"># If there is an exception, use nan</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">test_func</span><span class="p">(</span><span class="n">x_array</span><span class="p">)</span><span class="o">.</span><span class="n">dual</span> <span class="c1"># derivative of f(x) array</span>
+
+    <span class="k">return</span> <span class="n">diff</span>
+
+
+
+<span class="k">def</span> <span class="nf">fd</span><span class="p">(</span><span class="n">x_array</span><span class="p">):</span>
+    <span class="c1"># Find the derivative using central finite difference.</span>
+    <span class="c1"># Uses the real part of test_func to find f(x)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">test_func</span><span class="p">(</span><span class="n">x_array</span><span class="p">)</span><span class="o">.</span><span class="n">real</span> <span class="c1"># value of f(x) array</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x_array</span><span class="p">)</span> <span class="c1"># derivative found via finite difference</span>
+    <span class="k">return</span> <span class="n">diff</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">N_data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">4000</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">3.13</span><span class="p">,</span> <span class="n">N_data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1"># generate data inside defined region, avoid x = 0 and x = pi</span>
+    <span class="n">y_auto</span> <span class="o">=</span> <span class="n">auto_diff</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># autodifferentiate</span>
+    <span class="n">y_fd</span> <span class="o">=</span> <span class="n">fd</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1"># finite difference</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Number of data points = </span><span class="si">{</span><span class="n">N_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">y_auto</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Auto-differentiation&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">y_fd</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Central Difference&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$f~</span><span class="se">\&#39;</span><span class="s1">(x)$&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/dual_autodiff_x_25_0.png" src="_images/dual_autodiff_x_25_0.png" />
+</div>
+</div>
+<p>Autodifferentiation gives the analytical values for the derivatives, whereas finite difference approximates them based on the rise over run between neighboring data points. Therefore, finite difference suffers when there are not enough data points, which is especially apparent when there are only 4 data points. Additionally, finite difference performs poorly when the slopes are very large, such as at the asymptotes at <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">x=pi</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Dual Class Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandr Prucha.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

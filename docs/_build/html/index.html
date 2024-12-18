@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dual Autodifferentiation Package Documentation &mdash; Cython Dual Autodifferentiaton Package 0.1.dev0+d20241205 documentation</title>
+  <title>Dual Class Documentation &mdash; Dual Autodifferentiation Package for Cython 0.1.dev0+d20241205 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -21,7 +21,8 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dual Autodifferentiation Tutorial" href="dual_autodiff_x.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,7 +34,7 @@
           
           
           <a href="#" class="icon icon-home">
-            Cython Dual Autodifferentiaton Package
+            Dual Autodifferentiation Package for Cython
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -43,22 +44,31 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Dual Autodifferentiation Package Documentation</a><ul>
-<li><a class="reference internal" href="#module-reference">Module Reference</a></li>
-<li><a class="reference internal" href="#dual-class">Dual Class</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Class Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dual Class Documentation</a></li>
 </ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dual_autodiff_x.html">Dual Autodifferentiation Tutorial</a></li>
 </ul>
-</div>
+<p class="caption" role="heading"><span class="caption-text">Indices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Summary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">Dual Autodiff_x Module</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">Cython Dual Autodifferentiaton Package</a>
+          <a href="#">Dual Autodifferentiation Package for Cython</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -66,7 +76,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Dual Autodifferentiation Package Documentation</li>
+      <li class="breadcrumb-item active">Dual Class Documentation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -76,19 +86,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="dual-autodifferentiation-package-documentation">
-<h1>Dual Autodifferentiation Package Documentation<a class="headerlink" href="#dual-autodifferentiation-package-documentation" title="Link to this heading"></a></h1>
-<p>Welcome to the documentation for the Dual Autodifferentiation Package! This package provides utilities for automatic differentiation.</p>
-<section id="module-reference">
-<h2>Module Reference<a class="headerlink" href="#module-reference" title="Link to this heading"></a></h2>
-<p>In this secition we provide detailed documentation for the modules and classes in the <cite>dual_autodiff_x</cite> package.</p>
+  <section id="dual-class-documentation">
+<h1>Dual Class Documentation<a class="headerlink" href="#dual-class-documentation" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><strong>Author</strong>: Alexandr Prucha</p></li>
+<li><p><strong>Project</strong>: Autodifferentiation with Dual Numbers</p></li>
+<li><p><strong>Version</strong>: 0.1</p></li>
+<li><p><strong>Python Version</strong>: 3.12.3</p></li>
+<li><p><strong>License</strong>: MIT</p></li>
+</ul>
+<p>Welcome to the documentation for the Dual Autodifferentiation Package for Cython! This package provides utilities for automatic differentiation.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>To install the package, download the wheel for your python version and run the following command in the Python shell:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>./dual_autodiff_x-0.0.1b2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+</pre></div>
+</div>
+<p>for python3.11 or:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>./dual_autodiff_x-0.0.1b2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+</pre></div>
+</div>
+<p>for python3.10.</p>
+<p>Note: Separate installations of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> and <code class="docutils literal notranslate"><span class="pre">pytest</span></code> are required.</p>
+<p>In this section we provide detailed documentation for the modules and classes in the <code class="docutils literal notranslate"><span class="pre">dual_autodiff_x</span></code> package.</p>
 </section>
-<section id="dual-class">
-<h2>Dual Class<a class="headerlink" href="#dual-class" title="Link to this heading"></a></h2>
-<p>The <cite>Dual_x</cite> generates Dual numbers from pairs of inputs. It also provides methods for performing basic calculations, and evaluating elementary functions:</p>
+</section>
+<section id="dual-class-overview">
+<h1>Dual Class Overview<a class="headerlink" href="#dual-class-overview" title="Link to this heading"></a></h1>
+<p>The class <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> generates Dual numbers from pairs of inputs. It also provides methods for performing basic calculations, and evaluating elementary functions.
+Like its equivalen <cite>Dual</cite> class in the pure Python version of the package, <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> dynamically type-checks inputs and handles
+them appropriately as scalars or arrays. For faster computation, the package also includes class <code class="docutils literal notranslate"><span class="pre">Dual_x_array</span></code> for specific use
+on arrays, that does statically declares the variables as array-like. In terms of syntax, <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> and <code class="docutils literal notranslate"><span class="pre">Dual_x_array</span></code> are otherwise
+identical, so we only include <code class="docutils literal notranslate"><span class="pre">Dual_x</span></code> here.</p>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dual_autodiff_x.dual.</span></span><span class="sig-name descname"><span class="pre">Dual_x</span></span></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Dual_x</span></span></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class representing dual numbers for automatic differentiation.</p>
 <dl class="py attribute">
@@ -125,14 +157,95 @@ are evaluated according to the following formula:</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Compute the cosine of the Dual number.</p>
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Add two Dual_x numbers.</p>
+<dl class="simple">
+<dt>Operator:</dt><dd><p>Uses the <span class="math notranslate nohighlight">\(+\)</span> operator.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new Dual number representing the cosine.</p>
+<dd class="field-odd"><p>A new Dual_x number representing their sum.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dual</p>
+<dd class="field-even"><p>Dual_x</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Multiply two Dual_x numbers.</p>
+<dl class="simple">
+<dt>Operator:</dt><dd><p>Uses the <span class="math notranslate nohighlight">\(*\)</span> operator.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new Dual_x number representing the product <span class="math notranslate nohighlight">\((a + b\epsilon)(c + d\epsilon)\)</span>.
+The real part of the product output is simply the product of the real parts of the arguments <span class="math notranslate nohighlight">\(ab\)</span>.
+The dual part of the output is the term that is first order in <span class="math notranslate nohighlight">\(\epsilon\)</span> <span class="math notranslate nohighlight">\((ad + bc)\)</span>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dual_x</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__pow__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Raise a Dual_x number to a power.</p>
+<dl class="simple">
+<dt>Operator:</dt><dd><p>Uses the <span class="math notranslate nohighlight">\(**\)</span> operator.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exponent</strong> (<em>float</em><em>, </em><em>int</em>) – The exponent to raise the Dual_x number to. Must be a real number.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Dual_x number raised to the power of the exponent.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dual_x</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Subtract one Dual_x number from another.</p>
+<dl class="simple">
+<dt>Operator:</dt><dd><p>Uses the <span class="math notranslate nohighlight">\(-\)</span> operator.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new Dual_x number representing the difference.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dual_x</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For addition and subtraction, the real and dual parts are added or subtracted separately.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Compute the cosine of the Dual_x number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new Dual_x number representing the cosine.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dual_x</p>
 </dd>
 </dl>
 </dd></dl>
@@ -145,13 +258,13 @@ are evaluated according to the following formula:</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Compute the exponential of the Dual number.</p>
+<dd><p>Compute the exponential of the Dual_x number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new Dual number representing the exponential.</p>
+<dd class="field-odd"><p>A new Dual_x number representing the exponential.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dual</p>
+<dd class="field-even"><p>Dual_x</p>
 </dd>
 </dl>
 </dd></dl>
@@ -159,19 +272,13 @@ are evaluated according to the following formula:</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Compute the natural logarithm of the Dual number.</p>
+<dd><p>Compute the natural logarithm of the Dual_x number.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new Dual number representing the natural logarithm.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dual</p>
-</dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ValueError</strong> – If the real part is less than or equal to zero.</p></li>
 <li><p><strong>ValueError</strong> – If the real part is less than 1e-10.</p></li>
-<li><p><strong>RuntimeWarning</strong> – If the real part is close to zero within 1e-6 but larger than 1e-10, to warn of potential numerical instability.</p></li>
+<li><p><strong>RuntimeWarning</strong> – If the real part is close to zero within 1e-6 but larger than 1e-10.</p></li>
 </ul>
 </dd>
 </dl>
@@ -185,13 +292,13 @@ are evaluated according to the following formula:</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd><p>Compute the sine of the Dual number.</p>
+<dd><p>Compute the sine of the Dual_x number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new Dual number representing the sine.</p>
+<dd class="field-odd"><p>A new Dual_x number representing the sine.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dual</p>
+<dd class="field-even"><p>Dual_x</p>
 </dd>
 </dl>
 </dd></dl>
@@ -205,7 +312,7 @@ are evaluated according to the following formula:</p>
 <dd class="field-odd"><p>A new Dual number representing the tangent.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dual</p>
+<dd class="field-even"><p><a class="reference internal" href="source/dual_autodiff.html#dual_autodiff.dual.Dual" title="dual_autodiff.dual.Dual">Dual</a></p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -218,54 +325,42 @@ are evaluated according to the following formula:</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dual_autodiff_x.dual.</span></span><span class="sig-name descname"><span class="pre">Dual_x_array</span></span></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">dual</span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">real</span></span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="jupyter-notebook-example">
+<h1>Jupyter Notebook Example<a class="headerlink" href="#jupyter-notebook-example" title="Link to this heading"></a></h1>
+<p>Below is an example of a Jupyter notebook demonstrating the package’s usage:</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dual_autodiff_x.html">Dual Autodifferentiation Tutorial</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Indices</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+</ul>
+</div>
+<section id="module-reference">
+<h2>Module Reference<a class="headerlink" href="#module-reference" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Summary</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">Dual Autodiff_x Module</a></li>
+</ul>
+</div>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dual_autodiff_x.html" class="btn btn-neutral float-right" title="Dual Autodifferentiation Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

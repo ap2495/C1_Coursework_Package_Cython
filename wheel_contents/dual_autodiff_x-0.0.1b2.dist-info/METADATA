@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: dual_autodiff_x
-Version: 0.0.1b2
-Summary: A Cythonized version of dual_autodiff
-Author-email: Your Name <you@example.com>
-License: MIT
-Requires-Python: >=3.7
-Description-Content-Type: text/markdown
